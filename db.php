@@ -5,7 +5,7 @@ header('Content-Type: text/html; charset=utf-8');
 
 $servername = "localhost";
 $username = "root";
-$password = "mV81zHf5";
+$password = "12345678";
 $dbname = "filesexchange";
 
 $conn = mysqli_connect($servername, $username, $password, $dbname);
