@@ -1,5 +1,5 @@
 <?php
-    require_once('../check_backup.php');
+    require_once('check_backup.php');
     session_start();
     if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] == false) {
         header("Location: ../login");
@@ -85,8 +85,9 @@
             exit();
         }
         $password = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $conn->prepare("INSERT INTO `users` (username, `password`) VALUES (?, ?)");
-        $stmt->bind_param("ss", $username, $password);
+        $token_api = md5(microtime() . $password . time());
+        $stmt = $conn->prepare("INSERT INTO `users` (username, `password`, token_api) VALUES (?, ?, ?)");
+        $stmt->bind_param("sss", $username, $password, $token_api);
         if ($stmt->execute()) {
             $user_id = $stmt->insert_id;
             $action = "create";
@@ -115,8 +116,9 @@
             exit();
         }
         $password = password_hash($password, PASSWORD_BCRYPT);
-        $stmt = $conn->prepare("UPDATE `users` SET `password` = ? WHERE `id` = ?");
-        $stmt->bind_param("si", $password, $user_id);
+        $token_api = md5(microtime() . $password . time());
+        $stmt = $conn->prepare("UPDATE `users` SET `password` = ?, token_api = ? WHERE `id` = ?");
+        $stmt->bind_param("ssi", $password, $token_api, $user_id);
         if ($stmt->execute()) {
             $action = "changepassword";
             $stmt = $conn->prepare("INSERT INTO user_activity_log (user_id, action_type) VALUES (?, ?)");

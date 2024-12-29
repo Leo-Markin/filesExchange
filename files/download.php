@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once('../check_backup.php');
+require_once('check_backup.php');
 if (!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] == false) {
     header("Location: ../login");
     exit();

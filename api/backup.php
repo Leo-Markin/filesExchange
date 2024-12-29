@@ -1,5 +1,6 @@
 <?php
-file_put_contents('maintenance.flag', '');
+require_once('check_backup.php');
+file_put_contents('../maintenance.flag', '');
 function copyDirectory($src, $dst) {
     $dir = opendir($src);
     @mkdir($dst);
@@ -15,9 +16,9 @@ function copyDirectory($src, $dst) {
     closedir($dir);
 }
 
-$sourceDir = 'filesuploaded';
-$backupDir = 'filesbackup';
-require_once('db.php');
+$sourceDir = '../filesuploaded';
+$backupDir = '../filesbackup';
+require_once('../db.php');
 $stmt = $conn->prepare("INSERT INTO user_activity_log (user_id, action_type) VALUES (?, ?)");
 $user_id = 2;
 $action = "backup";
@@ -26,7 +27,7 @@ $stmt->execute();
 @rmdir($backupDir);
 copyDirectory($sourceDir, $backupDir);
 
-$backupFile = 'filesbackup/db_backup.sql';
+$backupFile = '../filesbackup/db_backup.sql';
 $output = array();
 $command = "mysqldump --host=$servername --user=$username --password=$password $dbname > $backupFile";
 exec($command, $output, $return_var);
@@ -38,5 +39,5 @@ if($return_var !== 0) {
 }
 
 // Удаление флага обслуживания
-unlink('maintenance.flag');
+unlink('../maintenance.flag');
 ?>

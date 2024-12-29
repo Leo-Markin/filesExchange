@@ -76,7 +76,7 @@
     <div class="container">
         <h2>FX - Авторизация</h2>
         <?php
-        require_once('../check_backup.php');
+        require_once('check_backup.php');
         session_start();
         if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] == true) {
             if ($_SESSION["ID"] == 2) {
@@ -104,10 +104,8 @@
             <input type="submit" value="Войти">
         </form>
     </div>
-
 </body>
 </html>
-
 <?php
     require_once('../db.php');
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
